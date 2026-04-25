@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ระบบสรุปยอดบัญชี - Enterprise Income</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Sarabun', 'Inter', sans-serif;
+      background: #f1f5f9;
+      padding: 15px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 20px;
+    }
+
+    .btn-back {
+      background: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #1e3a8a;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .summary-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 15px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .stat-card .label {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .stat-card .value {
+      font-size: 28px;
+      font-weight: bold;
+      color: #1e3a8a;
+    }
+
+    .employee-list {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .employee-item {
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .employee-item:last-child {
+      border-bottom: none;
+    }
+
+    .employee-header {
+      padding: 15px 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      transition: background 0.2s;
+    }
+
+    .employee-header:hover {
+      background: #f8fafc;
+    }
+
+    .employee-info {
+      display: flex;
+      align-items: baseline;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .employee-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #1e3a8a;
+    }
+
+    .employee-total {
+      font-size: 18px;
+      font-weight: bold;
+      color: #059669;
+    }
+
+    .employee-badge {
+      background: #e2e8f0;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: #475569;
+    }
+
+    .collapse-icon {
+      font-size: 16px;
+      transition: transform 0.2s;
+      color: #64748b;
+    }
+
+    .expanded .collapse-icon {
+      transform: rotate(180deg);
+    }
+
+    .employee-details {
+      display: none;
+      padding: 0 20px 20px 20px;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .expanded .employee-details {
+      display: block;
+    }
+
+    .shift-summary-item {
+      background: white;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      padding: 10px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-left: 4px solid #1e3a8a;
+    }
+
+    .shift-summary-item .shift-label {
+      font-weight: bold;
+      color: #1e3a8a;
+    }
+
+    .shift-summary-item .shift-amount {
+      font-weight: bold;
+      color: #059669;
+      font-size: 16px;
+    }
+
+    .btn-print-summary {
+      background: #475569;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-bottom: 20px;
+      width: 100%;
+    }
+
+    .search-box {
+      margin-bottom: 20px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 16px;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+      background: white;
+      border-radius: 16px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+
+    .loading-details {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    /* Print Styles */
+    @media print {
+      @page {
+        size: A4;
+        margin: 0.6cm;
+      }
+      
+      body {
+        background: white;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .btn-back, 
+      .btn-print-summary, 
+      .collapse-icon, 
+      .search-box,
+      .header .btn-back {
+        display: none !important;
+      }
+      
+      .employee-details {
+        display: block !important;
+      }
+      
+      .employee-header {
+        padding: 5px 0;
+        background: white;
+        cursor: default;
+      }
+      
+      .employee-header:hover {
+        background: white;
+      }
+      
+      .employee-info {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      
+      .employee-name {
+        font-size: 14px;
+        font-weight: bold;
+      }
+      
+      .employee-total {
+        font-size: 14px;
+        font-weight: bold;
+        color: #059669;
+      }
+      
+      .employee-badge {
+        display: none;
+      }
+      
+      .shift-summary-item {
+        background: none;
+        padding: 3px 0;
+        margin-bottom: 3px;
+        border-left: none;
+        display: flex;
+        justify-content: space-between;
+      }
+      
+      .shift-summary-item .shift-label {
+        font-size: 12px;
+        font-weight: normal;
+      }
+      
+      .shift-summary-item .shift-amount {
+        font-size: 12px;
+        font-weight: bold;
+        color: #059669;
+      }
+      
+    .summary-stats {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+/* หรือใช้ Grid แบบเต็มแถว */
+.summary-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+      
+      .header {
+        background: none;
+        color: black;
+        padding: 0 0 10px 0;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #000;
+      }
+      
+      .header h1 {
+        font-size: 16px;
+        color: black;
+      }
+      
+      .employee-item {
+        margin-bottom: 10px;
+        border: none;
+        border-bottom: 1px solid #eee;
+      }
+      
+      .employee-details {
+        padding: 5px 0;
+        background: none;
+      }
+      
+      .container {
+        padding: 0;
+      }
+      
+      .employee-list {
+        background: none;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>📊 สรุปยอดบัญชีร้าน</h1>
+    <a href="Index1.html" class="btn-back">🏠 กลับหน้าหลัก</a>
+  </div>
+
+  <div class="summary-stats" id="summaryStats">
+    <div class="stat-card">
+      <div class="label">👥 พนักงานทั้งหมด</div>
+      <div class="value" id="totalEmployees">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">💰 ยอดรวมสุทธิทั้งหมด</div>
+      <div class="value" id="grandTotalAll">0</div>
+    </div>
+  </div>
+
+  <button class="btn-print-summary" onclick="window.print()">🖨️ พิมพ์รายงานสรุปทั้งหมด</button>
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="🔍 ค้นหาชื่อพนักงาน..." onkeyup="filterEmployees()">
+  </div>
+
+  <div class="employee-list" id="employeesContainer">
+    <div class="loading">กำลังโหลดข้อมูล...</div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBtyAkkQVjZmNc2tvqN5GXQ9hKpcfEc4e0",
+    authDomain: "calculation-program-409b9.firebaseapp.com",
+    projectId: "calculation-program-409b9",
+    storageBucket: "calculation-program-409b9.firebasestorage.app",
+    messagingSenderId: "853222250185",
+    appId: "1:853222250185:web:dfb00b595ff88f48bb9f18"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  let allEmployees = [];
+  let allEmployeesFullData = [];
+
+  async function loadAllData() {
+    try {
+      const employeesRef = collection(db, "employees");
+      const employeesSnap = await getDocs(employeesRef);
+      
+      allEmployees = [];
+      allEmployeesFullData = [];
+      let grandTotal = 0;
+      
+      for (const empDoc of employeesSnap.docs) {
+        const empData = empDoc.data();
+        const empId = empDoc.id;
+        
+        // ดึงประวัติทั้งหมดของพนักงาน
+        const historyRef = collection(db, "employees", empId, "history");
+        const historySnap = await getDocs(historyRef);
+        
+        const shiftsTotal = {};
+        let empTotal = 0;
+        
+        historySnap.forEach(historyDoc => {
+          const data = historyDoc.data();
+          const shiftNum = data.shiftNum;
+          const income = data.income || 0;
+          
+          if (!shiftsTotal[shiftNum]) {
+            shiftsTotal[shiftNum] = 0;
+          }
+          shiftsTotal[shiftNum] += income;
+          empTotal += income;
+        });
+        
+        grandTotal += empTotal;
+        
+        const employeeData = {
+          id: empId,
+          name: empData.name,
+          currentShift: empData.currentShift || 1,
+          total: empTotal,
+          shifts: shiftsTotal
+        };
+        
+        allEmployees.push({
+          id: empId,
+          name: empData.name,
+          currentShift: empData.currentShift || 1,
+          total: empTotal
+        });
+        
+        allEmployeesFullData.push(employeeData);
+      }
+      
+      allEmployees.sort((a, b) => a.name.localeCompare(b.name));
+      allEmployeesFullData.sort((a, b) => a.name.localeCompare(b.name));
+      
+      document.getElementById('totalEmployees').innerText = allEmployees.length;
+      document.getElementById('grandTotalAll').innerText = grandTotal.toLocaleString();
+      
+      renderEmployeeListWithDetails(allEmployeesFullData);
+      
+    } catch (error) {
+      console.error("Error loading data:", error);
+      document.getElementById('employeesContainer').innerHTML = '<div class="no-data">❌ เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
+    }
+  }
+
+  function renderEmployeeListWithDetails(employees) {
+    if (employees.length === 0) {
+      document.getElementById('employeesContainer').innerHTML = '<div class="no-data">ไม่มีข้อมูลพนักงานในระบบ</div>';
+      return;
+    }
+    
+    let html = '';
+    
+    employees.forEach(emp => {
+      // เรียงลำดับกะ
+      const sortedShifts = Object.keys(emp.shifts).sort((a, b) => Number(a) - Number(b));
+      
+      let shiftsHtml = '';
+      sortedShifts.forEach(shiftNum => {
+        const shiftTotal = emp.shifts[shiftNum];
+        shiftsHtml += `
+          <div class="shift-summary-item">
+            <span class="shift-label">📌 กะที่ ${shiftNum}</span>
+            <span class="shift-amount">${shiftTotal.toLocaleString()} บาท</span>
+          </div>
+        `;
+      });
+      
+      if (shiftsHtml === '') {
+        shiftsHtml = '<div class="loading-details">📭 ไม่มีรายการยอดโอน</div>';
+      }
+      
+      html += `
+        <div class="employee-item expanded" data-name="${emp.name.toLowerCase()}">
+          <div class="employee-header" onclick="toggleEmployeeDetails(this.parentElement)">
+            <div class="employee-info">
+              <span class="employee-name">👤 ${emp.name}</span>
+              <span class="employee-total">💰 ${emp.total.toLocaleString()} บาท</span>
+              <span class="employee-badge">กะปัจจุบัน: ${emp.currentShift}</span>
+            </div>
+            <span class="collapse-icon">▼</span>
+          </div>
+          <div class="employee-details">
+            ${shiftsHtml}
+          </div>
+        </div>
+      `;
+    });
+    
+    document.getElementById('employeesContainer').innerHTML = html;
+  }
+
+  window.toggleEmployeeDetails = (element) => {
+    element.classList.toggle('expanded');
+  };
+
+  window.filterEmployees = () => {
+    const searchText = document.getElementById('searchInput').value.toLowerCase();
+    const filtered = allEmployeesFullData.filter(emp => emp.name.toLowerCase().includes(searchText));
+    renderEmployeeListWithDetails(filtered);
+  };
+
+  // โหลดข้อมูลทั้งหมดทันที
+  loadAllData();
+</script>
+
+</body>
+</html>
