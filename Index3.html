@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <base target="_top">
   <meta charset="UTF-8">
@@ -51,7 +52,7 @@
 
     .summary-stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: 1fr 1fr;
       gap: 15px;
       margin-bottom: 20px;
     }
@@ -61,7 +62,7 @@
       padding: 15px;
       border-radius: 16px;
       text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
 
     .stat-card .label {
@@ -152,26 +153,70 @@
       display: block;
     }
 
-    .shift-summary-item {
+    /* Shift Block */
+    .shift-block {
       background: white;
-      border-radius: 10px;
-      margin-bottom: 8px;
-      padding: 10px 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-left: 4px solid #1e3a8a;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
-    .shift-summary-item .shift-label {
+    .shift-title {
+      background: #e2e8f0;
+      padding: 10px 15px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .shift-title span:first-child {
+      color: #1e3a8a;
+    }
+
+    .shift-title span:last-child {
+      color: #059669;
+    }
+
+    .shift-records {
+      padding: 10px;
+    }
+
+    .shift-record-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .shift-record-item:last-child {
+      border-bottom: none;
+    }
+
+    .shift-time {
+      color: #666;
+      font-size: 13px;
+    }
+
+    .shift-amount {
       font-weight: bold;
       color: #1e3a8a;
     }
 
-    .shift-summary-item .shift-amount {
+    .shift-subtotal {
+      background: #dcfce7;
+      padding: 10px 12px;
       font-weight: bold;
-      color: #059669;
-      font-size: 16px;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #bbf7d0;
+      margin-top: 5px;
+      border-radius: 0 0 12px 12px;
+    }
+
+    .shift-records.collapsed {
+      display: none;
     }
 
     .btn-print-summary {
@@ -230,91 +275,97 @@
         size: A4;
         margin: 0.6cm;
       }
-      
+
       body {
         background: white;
         padding: 0;
         margin: 0;
       }
-      
-      .btn-back, 
-      .btn-print-summary, 
-      .collapse-icon, 
+
+      .btn-back,
+      .btn-print-summary,
+      .collapse-icon,
       .search-box,
-      .header .btn-back {
+      .header .btn-back,
+      .shift-title {
         display: none !important;
       }
-      
+
       .employee-details {
         display: block !important;
       }
-      
+
       .employee-header {
         padding: 5px 0;
         background: white;
         cursor: default;
       }
-      
+
       .employee-header:hover {
         background: white;
       }
-      
+
       .employee-info {
         display: flex;
         align-items: baseline;
         gap: 10px;
         flex-wrap: wrap;
       }
-      
+
       .employee-name {
         font-size: 14px;
         font-weight: bold;
       }
-      
+
       .employee-total {
         font-size: 14px;
         font-weight: bold;
         color: #059669;
       }
-      
+
       .employee-badge {
         display: none;
       }
-      
-      .shift-summary-item {
-        background: none;
-        padding: 3px 0;
-        margin-bottom: 3px;
-        border-left: none;
+
+      .shift-block {
+        margin-bottom: 8px;
+        break-inside: avoid;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      .shift-records {
+        display: block !important;
+        padding: 5px;
+      }
+
+      .shift-record-item {
         display: flex;
         justify-content: space-between;
+        padding: 3px 8px;
+        font-size: 11px;
       }
-      
-      .shift-summary-item .shift-label {
-        font-size: 12px;
-        font-weight: normal;
-      }
-      
-      .shift-summary-item .shift-amount {
-        font-size: 12px;
-        font-weight: bold;
-        color: #059669;
-      }
-      
-    .summary-stats {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 20px;
-}
 
-/* หรือใช้ Grid แบบเต็มแถว */
-.summary-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-      
+      .shift-time {
+        font-size: 11px;
+      }
+
+      .shift-amount {
+        font-size: 11px;
+      }
+
+      .shift-subtotal {
+        padding: 5px 8px;
+        font-size: 11px;
+      }
+
+      .summary-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
       .header {
         background: none;
         color: black;
@@ -322,27 +373,27 @@
         margin-bottom: 15px;
         border-bottom: 2px solid #000;
       }
-      
+
       .header h1 {
         font-size: 16px;
         color: black;
       }
-      
+
       .employee-item {
         margin-bottom: 10px;
         border: none;
         border-bottom: 1px solid #eee;
       }
-      
+
       .employee-details {
         padding: 5px 0;
         background: none;
       }
-      
+
       .container {
         padding: 0;
       }
-      
+
       .employee-list {
         background: none;
         box-shadow: none;
@@ -350,181 +401,214 @@
     }
   </style>
 </head>
+
 <body>
 
-<div class="container">
-  <div class="header">
-    <h1>📊 สรุปยอดบัญชีร้าน</h1>
-    <a href="index.html" class="btn-back">🏠 กลับหน้าหลัก</a>
-  </div>
-
-  <div class="summary-stats" id="summaryStats">
-    <div class="stat-card">
-      <div class="label">👥 พนักงานทั้งหมด</div>
-      <div class="value" id="totalEmployees">0</div>
+  <div class="container">
+    <div class="header">
+      <h1>📊 สรุปยอดบัญชีร้าน</h1>
+      <a href="index.html" class="btn-back">🏠 กลับหน้าหลัก</a>
     </div>
-    <div class="stat-card">
-      <div class="label">💰 ยอดรวมสุทธิทั้งหมด</div>
-      <div class="value" id="grandTotalAll">0</div>
+
+    <div class="summary-stats" id="summaryStats">
+      <div class="stat-card">
+        <div class="label">👥 พนักงานทั้งหมด</div>
+        <div class="value" id="totalEmployees">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">💰 ยอดรวมสุทธิทั้งหมด</div>
+        <div class="value" id="grandTotalAll">0</div>
+      </div>
+    </div>
+
+    <button class="btn-print-summary" onclick="window.print()">🖨️ พิมพ์รายงานสรุปทั้งหมด</button>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="🔍 ค้นหาชื่อพนักงาน..." onkeyup="filterEmployees()">
+    </div>
+
+    <div class="employee-list" id="employeesContainer">
+      <div class="loading">กำลังโหลดข้อมูล...</div>
     </div>
   </div>
 
-  <button class="btn-print-summary" onclick="window.print()">🖨️ พิมพ์รายงานสรุปทั้งหมด</button>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
-  <div class="search-box">
-    <input type="text" id="searchInput" placeholder="🔍 ค้นหาชื่อพนักงาน..." onkeyup="filterEmployees()">
-  </div>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBtyAkkQVjZmNc2tvqN5GXQ9hKpcfEc4e0",
+      authDomain: "calculation-program-409b9.firebaseapp.com",
+      projectId: "calculation-program-409b9",
+      storageBucket: "calculation-program-409b9.firebasestorage.app",
+      messagingSenderId: "853222250185",
+      appId: "1:853222250185:web:dfb00b595ff88f48bb9f18"
+    };
 
-  <div class="employee-list" id="employeesContainer">
-    <div class="loading">กำลังโหลดข้อมูล...</div>
-  </div>
-</div>
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+    let allEmployeesFullData = [];
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBtyAkkQVjZmNc2tvqN5GXQ9hKpcfEc4e0",
-    authDomain: "calculation-program-409b9.firebaseapp.com",
-    projectId: "calculation-program-409b9",
-    storageBucket: "calculation-program-409b9.firebasestorage.app",
-    messagingSenderId: "853222250185",
-    appId: "1:853222250185:web:dfb00b595ff88f48bb9f18"
-  };
+    async function loadAllData() {
+      try {
+        const employeesRef = collection(db, "employees");
+        const employeesSnap = await getDocs(employeesRef);
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+        allEmployeesFullData = [];
+        let grandTotal = 0;
 
-  let allEmployees = [];
-  let allEmployeesFullData = [];
+        for (const empDoc of employeesSnap.docs) {
+          const empData = empDoc.data();
+          const empId = empDoc.id;
 
-  async function loadAllData() {
-    try {
-      const employeesRef = collection(db, "employees");
-      const employeesSnap = await getDocs(employeesRef);
-      
-      allEmployees = [];
-      allEmployeesFullData = [];
-      let grandTotal = 0;
-      
-      for (const empDoc of employeesSnap.docs) {
-        const empData = empDoc.data();
-        const empId = empDoc.id;
-        
-        // ดึงประวัติทั้งหมดของพนักงาน
-        const historyRef = collection(db, "employees", empId, "history");
-        const historySnap = await getDocs(historyRef);
-        
-        const shiftsTotal = {};
-        let empTotal = 0;
-        
-        historySnap.forEach(historyDoc => {
-          const data = historyDoc.data();
-          const shiftNum = data.shiftNum;
-          const income = data.income || 0;
-          
-          if (!shiftsTotal[shiftNum]) {
-            shiftsTotal[shiftNum] = 0;
-          }
-          shiftsTotal[shiftNum] += income;
-          empTotal += income;
-        });
-        
-        grandTotal += empTotal;
-        
-        const employeeData = {
-          id: empId,
-          name: empData.name,
-          currentShift: empData.currentShift || 1,
-          total: empTotal,
-          shifts: shiftsTotal
-        };
-        
-        allEmployees.push({
-          id: empId,
-          name: empData.name,
-          currentShift: empData.currentShift || 1,
-          total: empTotal
-        });
-        
-        allEmployeesFullData.push(employeeData);
+          // ดึงประวัติทั้งหมดของพนักงาน
+          const historyRef = collection(db, "employees", empId, "history");
+          const historySnap = await getDocs(historyRef);
+
+          const shiftsTotal = {};
+          let empTotal = 0;
+
+          historySnap.forEach(historyDoc => {
+            const data = historyDoc.data();
+            const shiftNum = data.shiftNum;
+            const income = data.income || 0;
+            const timeString = data.timeString;
+            const hours = data.hours;
+            const minutes = data.minutes;
+
+            if (!shiftsTotal[shiftNum]) {
+              shiftsTotal[shiftNum] = { total: 0, records: [] };
+            }
+            shiftsTotal[shiftNum].total += income;
+            shiftsTotal[shiftNum].records.push({
+              income: income,
+              timeString: timeString,
+              hours: hours,
+              minutes: minutes
+            });
+            empTotal += income;
+          });
+
+          grandTotal += empTotal;
+
+          const employeeData = {
+            id: empId,
+            name: empData.name,
+            currentShift: empData.currentShift || 1,
+            total: empTotal,
+            shifts: shiftsTotal
+          };
+
+          allEmployeesFullData.push(employeeData);
+        }
+
+        allEmployeesFullData.sort((a, b) => a.name.localeCompare(b.name));
+
+        document.getElementById('totalEmployees').innerText = allEmployeesFullData.length;
+        document.getElementById('grandTotalAll').innerText = grandTotal.toLocaleString();
+
+        renderEmployeeListWithDetails(allEmployeesFullData);
+
+      } catch (error) {
+        console.error("Error loading data:", error);
+        document.getElementById('employeesContainer').innerHTML = '<div class="no-data">❌ เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
       }
-      
-      allEmployees.sort((a, b) => a.name.localeCompare(b.name));
-      allEmployeesFullData.sort((a, b) => a.name.localeCompare(b.name));
-      
-      document.getElementById('totalEmployees').innerText = allEmployees.length;
-      document.getElementById('grandTotalAll').innerText = grandTotal.toLocaleString();
-      
-      renderEmployeeListWithDetails(allEmployeesFullData);
-      
-    } catch (error) {
-      console.error("Error loading data:", error);
-      document.getElementById('employeesContainer').innerHTML = '<div class="no-data">❌ เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
     }
-  }
 
-  function renderEmployeeListWithDetails(employees) {
-    if (employees.length === 0) {
-      document.getElementById('employeesContainer').innerHTML = '<div class="no-data">ไม่มีข้อมูลพนักงานในระบบ</div>';
-      return;
-    }
-    
-    let html = '';
-    
-    employees.forEach(emp => {
-      // เรียงลำดับกะ
-      const sortedShifts = Object.keys(emp.shifts).sort((a, b) => Number(a) - Number(b));
-      
-      let shiftsHtml = '';
-      sortedShifts.forEach(shiftNum => {
-        const shiftTotal = emp.shifts[shiftNum];
-        shiftsHtml += `
-          <div class="shift-summary-item">
-            <span class="shift-label">📌 กะที่ ${shiftNum}</span>
-            <span class="shift-amount">${shiftTotal.toLocaleString()} บาท</span>
+    function renderEmployeeListWithDetails(employees) {
+      if (employees.length === 0) {
+        document.getElementById('employeesContainer').innerHTML = '<div class="no-data">ไม่มีข้อมูลพนักงานในระบบ</div>';
+        return;
+      }
+
+      let html = '';
+
+      employees.forEach(emp => {
+        // เรียงลำดับกะ
+        const sortedShifts = Object.keys(emp.shifts).sort((a, b) => Number(a) - Number(b));
+
+        let shiftsHtml = '';
+        
+        sortedShifts.forEach(shiftNum => {
+          const shiftData = emp.shifts[shiftNum];
+          const sortedRecords = [...shiftData.records].sort((a, b) => 
+            ((a.hours * 60) + (a.minutes || 0)) - ((b.hours * 60) + (b.minutes || 0))
+          );
+          
+          shiftsHtml += `
+            <div class="shift-block">
+              <div class="shift-title" onclick="toggleShiftRecords(this)">
+                <span>📌 กะที่ ${shiftNum}</span>
+                <span>${shiftData.total.toLocaleString()} บาท</span>
+              </div>
+              <div class="shift-records">
+          `;
+          
+          sortedRecords.forEach(record => {
+            shiftsHtml += `
+              <div class="shift-record-item">
+                <span class="shift-time">${record.timeString || '--:--'} น.</span>
+                <span class="shift-amount">${record.income.toLocaleString()} บาท</span>
+              </div>
+            `;
+          });
+          
+          shiftsHtml += `
+                <div class="shift-subtotal">
+                  <span>รวมทั้งสิ้น</span>
+                  <span>${shiftData.total.toLocaleString()} บาท</span>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        if (shiftsHtml === '') {
+          shiftsHtml = '<div class="loading-details">📭 ไม่มีรายการยอดโอน</div>';
+        }
+
+        html += `
+          <div class="employee-item expanded" data-name="${emp.name.toLowerCase()}">
+            <div class="employee-header" onclick="toggleEmployeeDetails(this.parentElement)">
+              <div class="employee-info">
+                <span class="employee-name">👤 ${emp.name}</span>
+                <span class="employee-total">💰 ${emp.total.toLocaleString()} บาท</span>
+                <span class="employee-badge">กะปัจจุบัน: ${emp.currentShift}</span>
+              </div>
+              <span class="collapse-icon">▼</span>
+            </div>
+            <div class="employee-details">
+              ${shiftsHtml}
+            </div>
           </div>
         `;
       });
-      
-      if (shiftsHtml === '') {
-        shiftsHtml = '<div class="loading-details">📭 ไม่มีรายการยอดโอน</div>';
+
+      document.getElementById('employeesContainer').innerHTML = html;
+    }
+
+    window.toggleEmployeeDetails = (element) => {
+      element.classList.toggle('expanded');
+    };
+
+    window.toggleShiftRecords = (element) => {
+      const recordsDiv = element.nextElementSibling;
+      if (recordsDiv) {
+        recordsDiv.classList.toggle('collapsed');
       }
-      
-      html += `
-        <div class="employee-item expanded" data-name="${emp.name.toLowerCase()}">
-          <div class="employee-header" onclick="toggleEmployeeDetails(this.parentElement)">
-            <div class="employee-info">
-              <span class="employee-name">👤 ${emp.name}</span>
-              <span class="employee-total">💰 ${emp.total.toLocaleString()} บาท</span>
-              <span class="employee-badge">กะปัจจุบัน: ${emp.currentShift}</span>
-            </div>
-            <span class="collapse-icon">▼</span>
-          </div>
-          <div class="employee-details">
-            ${shiftsHtml}
-          </div>
-        </div>
-      `;
-    });
-    
-    document.getElementById('employeesContainer').innerHTML = html;
-  }
+    };
 
-  window.toggleEmployeeDetails = (element) => {
-    element.classList.toggle('expanded');
-  };
+    window.filterEmployees = () => {
+      const searchText = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allEmployeesFullData.filter(emp => emp.name.toLowerCase().includes(searchText));
+      renderEmployeeListWithDetails(filtered);
+    };
 
-  window.filterEmployees = () => {
-    const searchText = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = allEmployeesFullData.filter(emp => emp.name.toLowerCase().includes(searchText));
-    renderEmployeeListWithDetails(filtered);
-  };
-
-  // โหลดข้อมูลทั้งหมดทันที
-  loadAllData();
-</script>
+    // โหลดข้อมูลทั้งหมดทันที
+    loadAllData();
+  </script>
 
 </body>
+
 </html>
