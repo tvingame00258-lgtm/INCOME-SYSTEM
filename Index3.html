@@ -269,11 +269,11 @@
       font-size: 14px;
     }
 
-    /* Print Styles */
+    /*     /* Print Styles */
     @media print {
       @page {
         size: A4;
-        margin: 0.6cm;
+        margin: 0.45cm;
       }
 
       body {
@@ -296,7 +296,7 @@
       }
 
       .employee-header {
-        padding: 5px 0;
+        padding: 3px 0;
         background: white;
         cursor: default;
       }
@@ -308,17 +308,17 @@
       .employee-info {
         display: flex;
         align-items: baseline;
-        gap: 10px;
+        gap: 8px;
         flex-wrap: wrap;
       }
 
       .employee-name {
-        font-size: 14px;
+        font-size: 16px;
         font-weight: bold;
       }
 
       .employee-total {
-        font-size: 14px;
+        font-size: 16px;
         font-weight: bold;
         color: #059669;
       }
@@ -328,7 +328,7 @@
       }
 
       .shift-block {
-        margin-bottom: 8px;
+        margin-bottom: 5px;
         break-inside: avoid;
         border: 1px solid #ddd;
         border-radius: 4px;
@@ -336,58 +336,70 @@
 
       .shift-records {
         display: block !important;
-        padding: 5px;
+        padding: 3px;
       }
 
       .shift-record-item {
         display: flex;
         justify-content: space-between;
-        padding: 3px 8px;
-        font-size: 11px;
+        padding: 2px 6px;
+        font-size: 13px;
       }
 
       .shift-time {
-        font-size: 13px;
+        font-size: 14px;
         color: #000;
       }
 
       .shift-amount {
-        font-size: 11px;
+        font-size: 13px;
       }
 
       .shift-subtotal {
-        padding: 5px 8px;
-        font-size: 11px;
+        padding: 3px 6px;
+        font-size: 13px;
       }
 
       .summary-stats {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 15px;
-        margin-bottom: 20px;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+
+      .stat-card {
+        padding: 8px;
+      }
+
+      .stat-card .label {
+        font-size: 14px;
+      }
+
+      .stat-card .value {
+        font-size: 24px;
       }
 
       .header {
         background: none;
         color: black;
-        padding: 0 0 10px 0;
-        margin-bottom: 15px;
+        padding: 0 0 6px 0;
+        margin-bottom: 8px;
         border-bottom: 2px solid #000;
       }
 
       .header h1 {
-        font-size: 16px;
+        font-size: 18px;
         color: black;
       }
 
       .employee-item {
-        margin-bottom: 10px;
+        margin-bottom: 5px;
         border: none;
         border-bottom: 1px solid #eee;
       }
 
       .employee-details {
-        padding: 5px 0;
+        padding: 3px 0;
         background: none;
       }
 
@@ -399,8 +411,7 @@
         background: none;
         box-shadow: none;
       }
-    }
-  </style>
+    }</style>
 </head>
 
 <body>
